@@ -2,11 +2,10 @@
 const toggle = document.getElementById("menu-toggle");
 const menu = document.getElementById("menu");
 
-if (toggle && menu) {
-  toggle.onclick = () => {
-    menu.classList.toggle("active");
-  };
-}
+toggle.addEventListener("click", () => {
+  toggle.classList.toggle("active");
+  menu.classList.toggle("active");
+});
 
 // ================= DARK MODE =================
 const btn = document.createElement("button");
@@ -142,3 +141,250 @@ if (btnTop) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 }
+
+// ================= ler mais =================
+
+document.querySelectorAll(".ler-mais").forEach(button => {
+  button.addEventListener("click", () => {
+
+    const parent = button.parentElement;
+    const fullText = parent.querySelector(".full-text");
+
+    if (fullText.style.display === "block") {
+      fullText.style.display = "none";
+      button.innerText = "Ler mais";
+    } else {
+      fullText.style.display = "block";
+      button.innerText = "Ler menos";
+    }
+
+  });
+});
+
+// ================= carrosel linhas de produros =================
+
+const track = document.getElementById("track");
+
+let isDown = false;
+let startX;
+let scrollLeft;
+
+/* MOUSE */
+track.addEventListener("mousedown", (e) => {
+  isDown = true;
+  track.classList.add("dragging");
+  startX = e.pageX;
+  scrollLeft = track.scrollLeft;
+});
+
+track.addEventListener("mouseleave", () => {
+  isDown = false;
+});
+
+track.addEventListener("mouseup", () => {
+  isDown = false;
+});
+
+track.addEventListener("mousemove", (e) => {
+  if (!isDown) return;
+  e.preventDefault();
+  const walk = (e.pageX - startX) * 1.5;
+  track.scrollLeft = scrollLeft - walk;
+});
+
+/* TOUCH */
+track.addEventListener("touchstart", (e) => {
+  startX = e.touches[0].pageX;
+  scrollLeft = track.scrollLeft;
+});
+
+track.addEventListener("touchmove", (e) => {
+  const walk = (e.touches[0].pageX - startX) * 1.5;
+  track.scrollLeft = scrollLeft - walk;
+});
+
+// ================= revendedores =================
+
+const cards = document.querySelectorAll(".card-dist");
+const btnVerMais = document.querySelector(".btn-vermais");
+const searchInput = document.getElementById("searchInput");
+
+let limiteDesktop = 4;
+let limiteMobile = 2;
+let mostrandoTodos = false;
+
+// DEFINIR LIMITE RESPONSIVO
+function getLimite() {
+  return window.innerWidth <= 768 ? limiteMobile : limiteDesktop;
+}
+
+// MOSTRAR CARDS
+function atualizarCards() {
+  const limite = getLimite();
+
+  cards.forEach((card, index) => {
+    if (mostrandoTodos) {
+      card.style.display = "block";
+    } else {
+      card.style.display = index < limite ? "block" : "none";
+    }
+  });
+
+  btnVerMais.innerText = mostrandoTodos ? "Ver menos" : "Ver mais";
+}
+
+// BOTÃO VER MAIS
+const cards = document.querySelectorAll(".card-dist");
+const btnVerMais = document.querySelector(".btn-vermais");
+
+let mostrandoTodos = false;
+
+function atualizarCards() {
+  const isMobile = window.innerWidth <= 768;
+  const limite = isMobile ? 2 : 4;
+
+  cards.forEach((card, index) => {
+    if (!mostrandoTodos && index >= limite) {
+      card.style.display = "none";
+    } else {
+      card.style.display = "block";
+    }
+  });
+
+  btnVerMais.innerText = mostrandoTodos ? "Ver menos" : "Ver mais";
+}
+
+function mostrarMais() {
+  mostrandoTodos = !mostrandoTodos;
+  atualizarCards();
+}
+
+// GARANTE QUE RODA DEPOIS DO LOAD
+window.addEventListener("load", atualizarCards);
+window.addEventListener("resize", atualizarCards);
+
+// revendedores 
+
+const trackDist = document.getElementById("trackDist");
+const cardsDist = document.querySelectorAll(".card-dist");
+const btnVerMais = document.querySelector(".btn-vermais");
+
+let isDown = false;
+let startX;
+let scrollLeft;
+let mostrandoTodos = false;
+
+/* DRAG */
+trackDist.addEventListener("mousedown", (e) => {
+  isDown = true;
+  trackDist.style.cursor = "grabbing";
+  startX = e.pageX - trackDist.offsetLeft;
+  scrollLeft = trackDist.scrollLeft;
+});
+
+trackDist.addEventListener("mouseleave", () => isDown = false);
+trackDist.addEventListener("mouseup", () => {
+  isDown = false;
+  trackDist.style.cursor = "grab";
+});
+
+trackDist.addEventListener("mousemove", (e) => {
+  if (!isDown) return;
+  e.preventDefault();
+  const x = e.pageX - trackDist.offsetLeft;
+  const walk = (x - startX) * 2;
+  trackDist.scrollLeft = scrollLeft - walk;
+});
+
+/* TOUCH */
+trackDist.addEventListener("touchstart", (e) => {
+  startX = e.touches[0].pageX;
+  scrollLeft = trackDist.scrollLeft;
+});
+
+trackDist.addEventListener("touchmove", (e) => {
+  const x = e.touches[0].pageX;
+  const walk = (x - startX) * 2;
+  trackDist.scrollLeft = scrollLeft - walk;
+});
+
+/* LIMITAR CARDS */
+function atualizarDistribuidores() {
+  const limite = window.innerWidth <= 768 ? 3 : 4;
+
+  cardsDist.forEach((card, index) => {
+    if (!mostrandoTodos && index >= limite) {
+      card.style.display = "none";
+    } else {
+      card.style.display = "block";
+    }
+  });
+
+  btnVerMais.innerText = mostrandoTodos ? "Ver menos" : "Ver mais";
+}
+
+/* BOTÃO */
+function mostrarMais() {
+  mostrandoTodos = !mostrandoTodos;
+  atualizarDistribuidores();
+}
+
+/* INIT */
+window.addEventListener("load", atualizarDistribuidores);
+window.addEventListener("resize", atualizarDistribuidores);
+
+/* carrosel testimonial */
+
+const tTrack = document.getElementById("testimonialTrack");
+
+let isDown = false;
+let startX;
+let scrollLeft;
+
+/* DRAG */
+tTrack.addEventListener("mousedown", (e) => {
+  isDown = true;
+  startX = e.pageX - tTrack.offsetLeft;
+  scrollLeft = tTrack.scrollLeft;
+});
+
+tTrack.addEventListener("mouseleave", () => isDown = false);
+tTrack.addEventListener("mouseup", () => isDown = false);
+
+tTrack.addEventListener("mousemove", (e) => {
+  if (!isDown) return;
+  const x = e.pageX - tTrack.offsetLeft;
+  const walk = (x - startX) * 2;
+  tTrack.scrollLeft = scrollLeft - walk;
+});
+
+/* TOUCH */
+tTrack.addEventListener("touchstart", (e) => {
+  startX = e.touches[0].pageX;
+  scrollLeft = tTrack.scrollLeft;
+});
+
+tTrack.addEventListener("touchmove", (e) => {
+  const x = e.touches[0].pageX;
+  const walk = (x - startX) * 2;
+  tTrack.scrollLeft = scrollLeft - walk;
+});
+
+/* ATIVO NO CENTRO */
+function updateTestimonial() {
+  const cards = document.querySelectorAll(".testimonial-card");
+  const center = window.innerWidth / 2;
+
+  cards.forEach(card => {
+    const rect = card.getBoundingClientRect();
+    const cardCenter = rect.left + rect.width / 2;
+
+    if (Math.abs(center - cardCenter) < 150) {
+      card.classList.add("active");
+    } else {
+      card.classList.remove("active");
+    }
+  });
+}
+
+setInterval(updateTestimonial, 100);
