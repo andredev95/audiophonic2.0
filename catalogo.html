@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Catálogo Audiophonic</title>
+
+<link rel="stylesheet" href="./style.css">
+
+<style>
+
+/* ===== BASE ===== */
+body {
+  background: #0b0b0b;
+  color: #fff;
+  font-family: sans-serif;
+}
+
+/* HEADER */
+.catalog-header {
+  text-align: center;
+  padding: 80px 20px 40px;
+}
+
+.catalog-header h1 {
+  font-size: 42px;
+}
+
+.catalog-header p {
+  color: #aaa;
+}
+
+/* FILTRO */
+.filter-bar {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 1px solid #444;
+  cursor: pointer;
+}
+
+.filter-btn.active {
+  background: #00c6ff;
+  color: #000;
+}
+
+/* GRID */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  padding: 40px;
+}
+
+/* CARD */
+.product-card {
+  background: rgba(255,255,255,0.05);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: 0.4s;
+}
+
+.product-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 50px rgba(0,198,255,0.2);
+}
+
+.product-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.product-info {
+  padding: 20px;
+}
+
+.product-info h3 {
+  margin-bottom: 10px;
+}
+
+.product-info p {
+  color: #bbb;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+/* BOTÃO */
+.btn-whatsapp {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 30px;
+  background: linear-gradient(135deg, #0575ee, #00c6ff);
+  color: #fff;
+  text-decoration: none;
+}
+
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<section class="catalog-header">
+  <h1 id="titulo">Linha</h1>
+  <p>Escolha o produto ideal para seu projeto de som</p>
+</section>
+
+<!-- FILTROS -->
+<div class="filter-bar">
+  <div class="filter-btn active" data-filter="all">Todos</div>
+  <div class="filter-btn" data-filter="sub">Subwoofer</div>
+  <div class="filter-btn" data-filter="amp">Amplificador</div>
+</div>
+
+<!-- PRODUTOS -->
+<div class="products-grid" id="grid"></div>
+
+<script>
+
+/* ================= LINHA ================= */
+const params = new URLSearchParams(window.location.search);
+const linha = params.get("linha");
+
+const titulo = document.getElementById("titulo");
+
+/* ================= PRODUTOS ================= */
+const produtos = {
+
+  club: [
+    {nome:"Sub Club 12", cat:"sub", img:"./assets/club.jpg.jpeg"},
+    {nome:"Amp Club 800", cat:"amp", img:"./assets/club.jpg.jpeg"}
+  ],
+
+  need: [
+    {nome:"Sub Need 10", cat:"sub", img:"./assets/need.jpg.jpeg"},
+    {nome:"Amp Need 600", cat:"amp", img:"./assets/need.jpg.jpeg"}
+  ],
+
+  sensation: [
+    {nome:"Sub Sensation 15", cat:"sub", img:"./assets/sensation.jpg.jpeg"},
+    {nome:"Amp Sensation 1200", cat:"amp", img:"./assets/sensation.jpg.jpeg"}
+  ]
+
+};
+
+/* ================= SET TITULO ================= */
+titulo.innerText = "Linha " + linha.charAt(0).toUpperCase() + linha.slice(1);
+
+/* ================= RENDER ================= */
+const grid = document.getElementById("grid");
+
+function render(filter = "all") {
+
+  grid.innerHTML = "";
+
+  produtos[linha].forEach(p => {
+
+    if (filter !== "all" && p.cat !== filter) return;
+
+    grid.innerHTML += `
+      <div class="product-card" data-cat="${p.cat}">
+        <img src="${p.img}">
+        <div class="product-info">
+          <h3>${p.nome}</h3>
+          <p>Alta performance e qualidade sonora premium.</p>
+
+          <a href="./produto.html?produto=${encodeURIComponent(p.nome)}" 
+   class="btn-whatsapp">
+   Ver produto
+</a>
+        </div>
+      </div>
+    `;
+
+  });
+
+}
+
+render();
+
+/* ================= FILTRO ================= */
+document.querySelectorAll(".filter-btn").forEach(btn => {
+
+  btn.addEventListener("click", () => {
+
+    document.querySelectorAll(".filter-btn")
+      .forEach(b => b.classList.remove("active"));
+
+    btn.classList.add("active");
+
+    render(btn.dataset.filter);
+
+  });
+
+});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Produto</title>
+
+<link rel="stylesheet" href="./style.css">
+
+<style>
+
+.product-page {
+  padding: 80px 20px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.product-image img {
+  width: 100%;
+  border-radius: 20px;
+}
+
+.product-info h1 {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.product-info p {
+  color: #bbb;
+  margin-bottom: 20px;
+}
+
+.specs {
+  margin: 20px 0;
+}
+
+.specs li {
+  margin-bottom: 8px;
+}
+
+.btn-buy {
+  display: inline-block;
+  padding: 12px 25px;
+  border-radius: 30px;
+  background: linear-gradient(135deg, #0575ee, #00c6ff);
+  color: #fff;
+  text-decoration: none;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<section class="product-page">
+
+  <div class="product-grid">
+
+    <div class="product-image">
+      <img id="imgProduto">
+    </div>
+
+    <div class="product-info">
+      <h1 id="nomeProduto"></h1>
+      <p>Alta performance sonora com qualidade premium Audiophonic.</p>
+
+      <ul class="specs">
+        <li>✔ Alta potência</li>
+        <li>✔ Construção premium</li>
+        <li>✔ Som limpo e forte</li>
+      </ul>
+
+      <a id="btnComprar" class="btn-buy">Encontrar revendedor</a>
+    </div>
+
+  </div>
+
+</section>
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+const nome = params.get("produto");
+
+const nomeEl = document.getElementById("nomeProduto");
+const imgEl = document.getElementById("imgProduto");
+const btn = document.getElementById("btnComprar");
+
+/* SIMULA BANCO DE PRODUTOS */
+const produtos = {
+  "Sub Club 12": {
+    img: "./assets/club.jpg.jpeg"
+  },
+  "Amp Club 800": {
+    img: "./assets/club.jpg.jpeg"
+  },
+  "Sub Need 10": {
+    img: "./assets/need.jpg.jpeg"
+  },
+  "Sub Sensation 15": {
+    img: "./assets/sensation.jpg.jpeg"
+  }
+};
+
+const produto = produtos[nome];
+
+if (produto) {
+  nomeEl.innerText = nome;
+  imgEl.src = produto.img;
+
+  btn.href = `./index.html?produto=${encodeURIComponent(nome)}#distribuidores`;
+}
+
+</script>
+
+</body>
+</html>

@@ -335,3 +335,19 @@ if (tTrack) {
 
   updateActive();
 }
+
+ /* ================= AUTO BUSCA ================= */
+
+ const params = new URLSearchParams(window.location.search);
+const produto = params.get("produto");
+
+if (produto) {
+  const input = document.getElementById("searchInput");
+
+  if (input) {
+    input.value = produto.toLowerCase();
+
+    // dispara o filtro automaticamente
+    input.dispatchEvent(new Event("input"));
+  }
+}

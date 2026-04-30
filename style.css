@@ -510,7 +510,7 @@ html {
 }
 
 /* nossas linhas */
-/* TÍTULO */
+
 
 
 
@@ -538,6 +538,13 @@ html {
 }
 
 /* GRID */
+
+.card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
 .cards-grid {
   display: flex;
   justify-content: center;
