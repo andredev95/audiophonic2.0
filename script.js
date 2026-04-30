@@ -1,67 +1,49 @@
-// ================= MENU =================
-const toggle = document.getElementById("menu-toggle");
+// ================= MENU MOBILE =================
 const menu = document.getElementById("menu");
+const toggle = document.getElementById("menu-toggle");
+const links = document.querySelectorAll("#menu a");
 
-toggle.addEventListener("click", () => {
-  toggle.classList.toggle("active");
-  menu.classList.toggle("active");
+if (toggle && menu) {
+  toggle.addEventListener("click", () => {
+    menu.classList.toggle("active");
+  });
+}
+
+links.forEach(link => {
+  link.addEventListener("click", () => {
+    menu.classList.remove("active");
+  });
 });
-
-// ================= DARK MODE =================
-const btn = document.createElement("button");
-btn.innerText = "🌙";
-btn.style.position = "fixed";
-btn.style.bottom = "20px";
-btn.style.right = "20px";
-btn.style.zIndex = "9999";
-document.body.appendChild(btn);
-
-btn.onclick = () => {
-  document.body.classList.toggle("light");
-};
 
 // ================= GSAP =================
 if (typeof gsap !== "undefined") {
   gsap.from(".hero h1", { opacity: 0, y: 50, duration: 1 });
-  gsap.from(".card", { opacity: 0, y: 50, stagger: 0.2 });
+  gsap.from(".card-pro", { opacity: 0, y: 50, stagger: 0.2 });
 }
 
-// ================= API TEST =================
-fetch("https://jsonplaceholder.typicode.com/posts/1")
-  .then(res => res.json())
-  .then(data => console.log("API:", data))
-  .catch(err => console.log("Erro API:", err));
 
-// ================= CARROSSEL =================
+// ================= CARROSSEL LINHAS =================
 const track = document.getElementById("track");
 
 if (track) {
-
   let isDown = false;
   let startX;
   let scrollLeft;
 
-  let autoScrollSpeed = 0.5;
-
-  // DRAG
   track.addEventListener("mousedown", (e) => {
     isDown = true;
-    track.style.cursor = "grabbing";
-    startX = e.pageX - track.offsetLeft;
+    track.classList.add("dragging");
+    startX = e.pageX;
     scrollLeft = track.scrollLeft;
   });
 
   track.addEventListener("mouseleave", () => isDown = false);
-  track.addEventListener("mouseup", () => {
-    isDown = false;
-    track.style.cursor = "grab";
-  });
+  track.addEventListener("mouseup", () => isDown = false);
 
   track.addEventListener("mousemove", (e) => {
     if (!isDown) return;
     e.preventDefault();
-    const x = e.pageX - track.offsetLeft;
-    const walk = (x - startX) * 2;
+    const walk = (e.pageX - startX) * 1.5;
     track.scrollLeft = scrollLeft - walk;
   });
 
@@ -72,14 +54,13 @@ if (track) {
   });
 
   track.addEventListener("touchmove", (e) => {
-    const x = e.touches[0].pageX;
-    const walk = (x - startX) * 2;
+    const walk = (e.touches[0].pageX - startX) * 1.5;
     track.scrollLeft = scrollLeft - walk;
   });
 
-  // AUTO SCROLL (mais leve)
+  // AUTO SCROLL
   function autoScroll() {
-    track.scrollLeft += autoScrollSpeed;
+    track.scrollLeft += 0.5;
 
     if (track.scrollLeft >= track.scrollWidth / 2) {
       track.scrollLeft = 0;
@@ -90,7 +71,7 @@ if (track) {
 
   autoScroll();
 
-  // ATIVO CENTRAL (otimizado)
+  // CARD ATIVO NO CENTRO
   function updateActiveCard() {
     const cards = document.querySelectorAll(".card-pro");
     const center = window.innerWidth / 2;
@@ -112,21 +93,86 @@ if (track) {
   updateActiveCard();
 }
 
-// ================= BUSCA =================
+
+// ================= BUSCA DISTRIBUIDORES =================
 const input = document.getElementById("searchInput");
-const cards = document.querySelectorAll(".card-dist");
+const cardsDist = document.querySelectorAll(".card-dist");
 
 if (input) {
   input.addEventListener("keyup", () => {
     const value = input.value.toLowerCase();
 
-    cards.forEach(card => {
+    cardsDist.forEach(card => {
       const local = card.dataset.local;
-
       card.style.display = local.includes(value) ? "block" : "none";
     });
   });
 }
+
+
+// ================= DISTRIBUIDORES (VER MAIS PRO) =================
+const searchInput = document.getElementById("searchInput");
+const filterState = document.getElementById("filterState");
+const btnVerMais = document.getElementById("btnVerMais");
+
+let visible = 2;
+let mostrandoTodos = false;
+
+function getCards() {
+  return document.querySelectorAll(".card-dist");
+}
+
+/* ================= FILTRO ================= */
+function filterDistributors() {
+  const search = searchInput.value.toLowerCase();
+  const state = filterState.value;
+
+  let count = 0;
+
+  getCards().forEach(card => {
+    const city = card.dataset.city;
+    const cardState = card.dataset.state;
+
+    const matchCity = city.includes(search);
+    const matchState = !state || cardState === state;
+
+    if (matchCity && matchState) {
+      if (!mostrandoTodos && count >= visible) {
+        card.style.display = "none";
+      } else {
+        card.style.display = "block";
+      }
+      count++;
+    } else {
+      card.style.display = "none";
+    }
+  });
+}
+
+/* ================= BOTÃO ================= */
+btnVerMais.addEventListener("click", () => {
+  mostrandoTodos = !mostrandoTodos;
+
+  btnVerMais.innerText = mostrandoTodos ? "Ver menos" : "Ver mais";
+
+  filterDistributors();
+});
+
+/* ================= EVENTOS ================= */
+searchInput.addEventListener("input", () => {
+  mostrandoTodos = false;
+  btnVerMais.innerText = "Ver mais";
+  filterDistributors();
+});
+
+filterState.addEventListener("change", () => {
+  mostrandoTodos = false;
+  btnVerMais.innerText = "Ver mais";
+  filterDistributors();
+});
+
+/* ================= INIT ================= */
+window.addEventListener("load", filterDistributors);
 
 // ================= BACK TO TOP =================
 const btnTop = document.getElementById("backToTop");
@@ -142,11 +188,10 @@ if (btnTop) {
   };
 }
 
-// ================= ler mais =================
 
+// ================= LER MAIS =================
 document.querySelectorAll(".ler-mais").forEach(button => {
   button.addEventListener("click", () => {
-
     const parent = button.parentElement;
     const fullText = parent.querySelector(".full-text");
 
@@ -157,234 +202,136 @@ document.querySelectorAll(".ler-mais").forEach(button => {
       fullText.style.display = "block";
       button.innerText = "Ler menos";
     }
-
   });
 });
 
-// ================= carrosel linhas de produros =================
 
-const track = document.getElementById("track");
-
-let isDown = false;
-let startX;
-let scrollLeft;
-
-/* MOUSE */
-track.addEventListener("mousedown", (e) => {
-  isDown = true;
-  track.classList.add("dragging");
-  startX = e.pageX;
-  scrollLeft = track.scrollLeft;
-});
-
-track.addEventListener("mouseleave", () => {
-  isDown = false;
-});
-
-track.addEventListener("mouseup", () => {
-  isDown = false;
-});
-
-track.addEventListener("mousemove", (e) => {
-  if (!isDown) return;
-  e.preventDefault();
-  const walk = (e.pageX - startX) * 1.5;
-  track.scrollLeft = scrollLeft - walk;
-});
-
-/* TOUCH */
-track.addEventListener("touchstart", (e) => {
-  startX = e.touches[0].pageX;
-  scrollLeft = track.scrollLeft;
-});
-
-track.addEventListener("touchmove", (e) => {
-  const walk = (e.touches[0].pageX - startX) * 1.5;
-  track.scrollLeft = scrollLeft - walk;
-});
-
-// ================= revendedores =================
-
-const cards = document.querySelectorAll(".card-dist");
-const btnVerMais = document.querySelector(".btn-vermais");
-const searchInput = document.getElementById("searchInput");
-
-let limiteDesktop = 4;
-let limiteMobile = 2;
-let mostrandoTodos = false;
-
-// DEFINIR LIMITE RESPONSIVO
-function getLimite() {
-  return window.innerWidth <= 768 ? limiteMobile : limiteDesktop;
-}
-
-// MOSTRAR CARDS
-function atualizarCards() {
-  const limite = getLimite();
-
-  cards.forEach((card, index) => {
-    if (mostrandoTodos) {
-      card.style.display = "block";
-    } else {
-      card.style.display = index < limite ? "block" : "none";
-    }
-  });
-
-  btnVerMais.innerText = mostrandoTodos ? "Ver menos" : "Ver mais";
-}
-
-// BOTÃO VER MAIS
-const cards = document.querySelectorAll(".card-dist");
-const btnVerMais = document.querySelector(".btn-vermais");
-
-let mostrandoTodos = false;
-
-function atualizarCards() {
-  const isMobile = window.innerWidth <= 768;
-  const limite = isMobile ? 2 : 4;
-
-  cards.forEach((card, index) => {
-    if (!mostrandoTodos && index >= limite) {
-      card.style.display = "none";
-    } else {
-      card.style.display = "block";
-    }
-  });
-
-  btnVerMais.innerText = mostrandoTodos ? "Ver menos" : "Ver mais";
-}
-
-function mostrarMais() {
-  mostrandoTodos = !mostrandoTodos;
-  atualizarCards();
-}
-
-// GARANTE QUE RODA DEPOIS DO LOAD
-window.addEventListener("load", atualizarCards);
-window.addEventListener("resize", atualizarCards);
-
-// revendedores 
-
-const trackDist = document.getElementById("trackDist");
-const cardsDist = document.querySelectorAll(".card-dist");
-const btnVerMais = document.querySelector(".btn-vermais");
-
-let isDown = false;
-let startX;
-let scrollLeft;
-let mostrandoTodos = false;
-
-/* DRAG */
-trackDist.addEventListener("mousedown", (e) => {
-  isDown = true;
-  trackDist.style.cursor = "grabbing";
-  startX = e.pageX - trackDist.offsetLeft;
-  scrollLeft = trackDist.scrollLeft;
-});
-
-trackDist.addEventListener("mouseleave", () => isDown = false);
-trackDist.addEventListener("mouseup", () => {
-  isDown = false;
-  trackDist.style.cursor = "grab";
-});
-
-trackDist.addEventListener("mousemove", (e) => {
-  if (!isDown) return;
-  e.preventDefault();
-  const x = e.pageX - trackDist.offsetLeft;
-  const walk = (x - startX) * 2;
-  trackDist.scrollLeft = scrollLeft - walk;
-});
-
-/* TOUCH */
-trackDist.addEventListener("touchstart", (e) => {
-  startX = e.touches[0].pageX;
-  scrollLeft = trackDist.scrollLeft;
-});
-
-trackDist.addEventListener("touchmove", (e) => {
-  const x = e.touches[0].pageX;
-  const walk = (x - startX) * 2;
-  trackDist.scrollLeft = scrollLeft - walk;
-});
-
-/* LIMITAR CARDS */
-function atualizarDistribuidores() {
-  const limite = window.innerWidth <= 768 ? 3 : 4;
-
-  cardsDist.forEach((card, index) => {
-    if (!mostrandoTodos && index >= limite) {
-      card.style.display = "none";
-    } else {
-      card.style.display = "block";
-    }
-  });
-
-  btnVerMais.innerText = mostrandoTodos ? "Ver menos" : "Ver mais";
-}
-
-/* BOTÃO */
-function mostrarMais() {
-  mostrandoTodos = !mostrandoTodos;
-  atualizarDistribuidores();
-}
-
-/* INIT */
-window.addEventListener("load", atualizarDistribuidores);
-window.addEventListener("resize", atualizarDistribuidores);
-
-/* carrosel testimonial */
-
+// ================= CARROSSEL TESTIMONIAL =================
 const tTrack = document.getElementById("testimonialTrack");
 
-let isDown = false;
-let startX;
-let scrollLeft;
+if (tTrack) {
 
-/* DRAG */
-tTrack.addEventListener("mousedown", (e) => {
-  isDown = true;
-  startX = e.pageX - tTrack.offsetLeft;
-  scrollLeft = tTrack.scrollLeft;
-});
+  let isDown = false;
+  let startX;
+  let scrollLeft;
+  let isPaused = false;
+  let autoScrollSpeed = 0.3;
+  let snapTimeout;
 
-tTrack.addEventListener("mouseleave", () => isDown = false);
-tTrack.addEventListener("mouseup", () => isDown = false);
+  const cards = () => document.querySelectorAll(".testimonial-card");
 
-tTrack.addEventListener("mousemove", (e) => {
-  if (!isDown) return;
-  const x = e.pageX - tTrack.offsetLeft;
-  const walk = (x - startX) * 2;
-  tTrack.scrollLeft = scrollLeft - walk;
-});
-
-/* TOUCH */
-tTrack.addEventListener("touchstart", (e) => {
-  startX = e.touches[0].pageX;
-  scrollLeft = tTrack.scrollLeft;
-});
-
-tTrack.addEventListener("touchmove", (e) => {
-  const x = e.touches[0].pageX;
-  const walk = (x - startX) * 2;
-  tTrack.scrollLeft = scrollLeft - walk;
-});
-
-/* ATIVO NO CENTRO */
-function updateTestimonial() {
-  const cards = document.querySelectorAll(".testimonial-card");
-  const center = window.innerWidth / 2;
-
-  cards.forEach(card => {
-    const rect = card.getBoundingClientRect();
-    const cardCenter = rect.left + rect.width / 2;
-
-    if (Math.abs(center - cardCenter) < 150) {
-      card.classList.add("active");
-    } else {
-      card.classList.remove("active");
-    }
+  /* ================= DRAG ================= */
+  tTrack.addEventListener("mousedown", (e) => {
+    isDown = true;
+    isPaused = true;
+    startX = e.pageX;
+    scrollLeft = tTrack.scrollLeft;
   });
-}
 
-setInterval(updateTestimonial, 100);
+  tTrack.addEventListener("mouseup", () => {
+    isDown = false;
+    isPaused = false;
+    snapToClosest();
+  });
+
+  tTrack.addEventListener("mouseleave", () => {
+    isDown = false;
+    isPaused = false;
+    snapToClosest();
+  });
+
+  tTrack.addEventListener("mousemove", (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const walk = (e.pageX - startX) * 1.5;
+    tTrack.scrollLeft = scrollLeft - walk;
+  });
+
+  /* ================= TOUCH ================= */
+  tTrack.addEventListener("touchstart", (e) => {
+    isPaused = true;
+    startX = e.touches[0].pageX;
+    scrollLeft = tTrack.scrollLeft;
+  });
+
+  tTrack.addEventListener("touchend", () => {
+    isPaused = false;
+    snapToClosest();
+  });
+
+  tTrack.addEventListener("touchmove", (e) => {
+    const walk = (e.touches[0].pageX - startX) * 1.5;
+    tTrack.scrollLeft = scrollLeft - walk;
+  });
+
+  /* ================= AUTOPLAY ================= */
+  function autoScroll() {
+
+    if (!isPaused && !isDown) {
+      tTrack.scrollLeft += autoScrollSpeed;
+    }
+
+    requestAnimationFrame(autoScroll);
+  }
+
+  autoScroll();
+
+  /* ================= SNAP CENTRAL PERFEITO ================= */
+  function snapToClosest() {
+    clearTimeout(snapTimeout);
+
+    snapTimeout = setTimeout(() => {
+      const trackRect = tTrack.getBoundingClientRect();
+      const center = trackRect.left + trackRect.width / 2;
+
+      let closest = null;
+      let closestDistance = Infinity;
+
+      cards().forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const cardCenter = rect.left + rect.width / 2;
+
+        const distance = Math.abs(center - cardCenter);
+
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closest = card;
+        }
+      });
+
+      if (closest) {
+        const offset =
+          closest.offsetLeft -
+          tTrack.offsetWidth / 2 +
+          closest.offsetWidth / 2;
+
+        tTrack.scrollTo({
+          left: offset,
+          behavior: "smooth"
+        });
+      }
+
+    }, 120); // delay evita conflito com drag
+  }
+
+  /* ================= CARD ATIVO ================= */
+  function updateActive() {
+    const trackRect = tTrack.getBoundingClientRect();
+    const center = trackRect.left + trackRect.width / 2;
+
+    cards().forEach(card => {
+      const rect = card.getBoundingClientRect();
+      const cardCenter = rect.left + rect.width / 2;
+
+      if (Math.abs(center - cardCenter) < 120) {
+        card.classList.add("active");
+      } else {
+        card.classList.remove("active");
+      }
+    });
+
+    requestAnimationFrame(updateActive);
+  }
+
+  updateActive();
+}
