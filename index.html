@@ -100,7 +100,7 @@
       <br>
 
       <button class="btn ler-mais">Descubra mais</button>
-      
+      <br>
        <div class="highlight">
         <br>
     <strong>+10 anos</strong>
@@ -157,11 +157,16 @@
 
 <!-- LINHAS -->
 
-<div class="cards-grid">
+<div class="cards-grid" id="linhas">
 
   <!-- CLUB -->
-  <a href="./catalogo.html?linha=club" class="card-link">
+  <a 
+    href="./catalogo.html?linha=club" 
+    class="card-link"
+    target="_blank"
+  >
     <div class="card-pro">
+
       <div class="card-image">
         <img src="assets/club.jpg.jpeg">
       </div>
@@ -170,12 +175,18 @@
         <h3>Club</h3>
         <p>Som puro e detalhado para verdadeiros audiófilos.</p>
       </div>
+
     </div>
   </a>
 
   <!-- NEED -->
-  <a href="./catalogo.html?linha=need" class="card-link">
+  <a 
+    href="./catalogo.html?linha=need" 
+    class="card-link"
+    target="_blank"
+  >
     <div class="card-pro">
+
       <div class="card-image">
         <img src="assets/need.jpg.jpeg">
       </div>
@@ -184,12 +195,18 @@
         <h3>Need</h3>
         <p>Equilíbrio perfeito entre potência e custo.</p>
       </div>
+
     </div>
   </a>
 
   <!-- SENSATION -->
-  <a href="./catalogo.html?linha=sensation" class="card-link">
+  <a 
+    href="./catalogo.html?linha=sensation" 
+    class="card-link"
+    target="_blank"
+  >
     <div class="card-pro">
+
       <div class="card-image">
         <img src="assets/sensation.jpg.jpeg">
       </div>
@@ -198,6 +215,7 @@
         <h3>Sensation</h3>
         <p>Experiência imersiva com máxima performance.</p>
       </div>
+
     </div>
   </a>
 
@@ -258,6 +276,7 @@
   <div class="container">
 
     <h2>Distribuidores</h2>
+
     <p class="subtitle">
       Encontre nossos parceiros em todo o Brasil.
     </p>
@@ -270,41 +289,14 @@
         <option value="rj">Rio de Janeiro</option>
         <option value="mg">Minas Gerais</option>
       </select>
-
-      <input type="text" id="searchInput" placeholder="Buscar cidade...">
     </div>
 
     <!-- GRID -->
     <div class="distributors-grid">
 
-      <!-- CARD -->
-
-      <!-- DUPLICA E ALTERA  
-
+      <!-- AUDIO DESIGN -->
       <div class="card-dist" data-state="sp" data-city="sao paulo">
-        <div class="banner"></div>
 
-        <div class="profile">
-          <img src="assets/AudiophoniGarantia.png">
-        </div>
-
-        <div class="content">
-          <h3>Audiophonic</h3>
-          <span>@audiophonicbr</span>
-          <p>Distribuidor oficial em São Paulo.</p>
-
-          <div class="social">
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-facebook-f"></i></a>
-          </div>
-
-          <div class="location">São Paulo - SP</div>
-        </div>
-      </div>
-
-        DUPLICA E ALTERA -->
-      
-<div class="card-dist" data-state="sp" data-city="sao paulo">
         <div class="banner"></div>
 
         <div class="profile">
@@ -313,19 +305,41 @@
 
         <div class="content">
           <h3>Audio Design</h3>
+
           <span>@audiodesignsp</span>
+
           <p>Distribuidor oficial em São Paulo.</p>
 
           <div class="social">
-            <a href="https://www.instagram.com/audiodesignsp/"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-facebook-f"></i></a>
+
+            <!-- INSTAGRAM -->
+            <a 
+              href="https://www.instagram.com/audiodesignsp/" 
+              target="_blank"
+            >
+              <i class="fab fa-instagram"></i>
+            </a>
+
+            <!-- WHATSAPP -->
+            <a 
+              href="https://wa.me/5511999523328" 
+              target="_blank"
+            >
+              <i class="fab fa-whatsapp"></i>
+            </a>
+
           </div>
 
-          <div class="location">São Paulo - SP</div>
+          <div class="location">
+            São Paulo - SP
+          </div>
+
         </div>
       </div>
 
-       <div class="card-dist" data-state="sp" data-city="sao paulo">
+      <!-- BETO AUTO SOM -->
+      <div class="card-dist" data-state="sc" data-city="santa catarina">
+
         <div class="banner"></div>
 
         <div class="profile">
@@ -333,20 +347,42 @@
         </div>
 
         <div class="content">
-          <h3>Beto auto som</h3>
+          <h3>Beto Auto Som</h3>
+
           <span>@betosom</span>
+
           <p>Distribuidor oficial em Santa Catarina.</p>
 
           <div class="social">
-            <a href="https://www.instagram.com/betosom/"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-facebook-f"></i></a>
+
+            <!-- INSTAGRAM -->
+            <a 
+              href="https://www.instagram.com/betosom/" 
+              target="_blank"
+            >
+              <i class="fab fa-instagram"></i>
+            </a>
+
+            <!-- WHATSAPP -->
+            <a 
+              href="https://wa.me/554896081280" 
+              target="_blank"
+            >
+              <i class="fab fa-whatsapp"></i>
+            </a>
+
           </div>
 
-          <div class="location">Santa Catarina - SC</div>
+          <div class="location">
+            Santa Catarina - SC
+          </div>
+
         </div>
       </div>
 
+      <!-- POTENT SOUND -->
       <div class="card-dist" data-state="sp" data-city="sao paulo">
+
         <div class="banner"></div>
 
         <div class="profile">
@@ -354,26 +390,98 @@
         </div>
 
         <div class="content">
-          <h3>Potent sound</h3>
+          <h3>Potent Sound</h3>
+
           <span>@potent_sound</span>
+
           <p>Distribuidor oficial em São Paulo.</p>
 
           <div class="social">
-            <a href="https://www.instagram.com/potent_sound/"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-facebook-f"></i></a>
+
+            <!-- INSTAGRAM -->
+            <a 
+              href="https://www.instagram.com/potent_sound/" 
+              target="_blank"
+            >
+              <i class="fab fa-instagram"></i>
+            </a>
+
+            <!-- WHATSAPP -->
+            <a 
+              href="https://wa.me/5511995482822" 
+              target="_blank"
+            >
+              <i class="fab fa-whatsapp"></i>
+            </a>
+
           </div>
 
-          <div class="location">São Paulo - SP</div>
+          <div class="location">
+            São Paulo - SP
+          </div>
+
         </div>
       </div>
-  
 
+      <!-- DUPLICA ESTE CARD -->
+      <div class="card-dist" data-state="sp" data-city="sao paulo">
+
+        <div class="banner"></div>
+
+        <div class="profile">
+          <img src="assets/POTENT SOUND - 11 995482822 - SP.jpg">
+        </div>
+
+        <div class="content">
+          <h3>Potent Sound</h3>
+
+          <span>@potent_sound</span>
+
+          <p>Distribuidor oficial em São Paulo.</p>
+
+          <div class="social">
+
+            <a 
+              href="https://www.instagram.com/potent_sound/" 
+              target="_blank"
+            >
+              <i class="fab fa-instagram"></i>
+            </a>
+
+            <a 
+              href="https://wa.me/5511995482822" 
+              target="_blank"
+            >
+              <i class="fab fa-whatsapp"></i>
+            </a>
+
+          </div>
+
+          <div class="location">
+            São Paulo - SP
+          </div>
+
+        </div>
+      </div>
 
     </div>
 
     <!-- BOTÃO -->
-    <button class="btn-vermais" id="btnVerMais">Ver mais</button>
+   
 
+  </div>
+</section>
+
+    <!-- BOTÃO -->
+    <!-- BOTÃO -->
+<div class="dist-actions">
+  <button
+    class="btn-vermais"
+    id="btnVerMais"
+    type="button">
+    Ver mais
+  </button>
+</div>
   </div>
 </section>
 
@@ -386,6 +494,7 @@
   </div>
 </section>
 
+<!-- SUPORTE -->
 <!-- SUPORTE -->
 <section class="support" id="suporte">
   <div class="container">
@@ -400,9 +509,20 @@
 
         <div class="support-content">
           <h3>Suporte Técnico</h3>
-          <p>Seu produto Audiophonic está com problema? Estamos aqui para ajudar.</p>
 
-          <a href="suporte.html" class="btn-vermais">Ver mais</a>
+          <p>
+            Seu produto Audiophonic está com problema?
+            Estamos aqui para ajudar.
+          </p>
+
+          <a
+            href="https://drive.google.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-vermais"
+          >
+            Ver mais
+          </a>
         </div>
       </div>
 
@@ -412,9 +532,20 @@
 
         <div class="support-content">
           <h3>Downloads</h3>
-          <p>Manuais, arquivos e informações completas dos nossos produtos.</p>
 
-          <a href="downloads.html" class="btn-vermais">Ver mais</a>
+          <p>
+            Manuais, arquivos e informações completas
+            dos nossos produtos.
+          </p>
+
+          <a
+            href="https://drive.google.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-vermais"
+          >
+            Ver mais
+          </a>
         </div>
       </div>
 
@@ -424,9 +555,20 @@
 
         <div class="support-content">
           <h3>Contato</h3>
-          <p>Fale com nossa equipe e tire suas dúvidas rapidamente.</p>
 
-          <a href="contato.html" class="btn-vermais">Ver mais</a>
+          <p>
+            Fale com nossa equipe e tire suas dúvidas
+            rapidamente.
+          </p>
+
+          <a
+            href="https://drive.google.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-vermais"
+          >
+            Ver mais
+          </a>
         </div>
       </div>
 

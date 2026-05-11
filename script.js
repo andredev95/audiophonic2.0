@@ -1,212 +1,360 @@
-// ================= MENU MOBILE =================
+// ======================================================
+// MENU MOBILE PREMIUM
+// ======================================================
+
 const menu = document.getElementById("menu");
 const toggle = document.getElementById("menu-toggle");
 const links = document.querySelectorAll("#menu a");
 
 if (toggle && menu) {
+
   toggle.addEventListener("click", () => {
+
     menu.classList.toggle("active");
+    toggle.classList.toggle("active");
+
+    document.body.classList.toggle("menu-open");
+
   });
+
+  links.forEach(link => {
+    link.addEventListener("click", () => {
+
+      menu.classList.remove("active");
+      toggle.classList.remove("active");
+      document.body.classList.remove("menu-open");
+
+    });
+  });
+
 }
 
-links.forEach(link => {
-  link.addEventListener("click", () => {
-    menu.classList.remove("active");
-  });
+
+// ======================================================
+// GSAP ANIMAÇÕES
+// ======================================================
+
+// ======================================================
+// GSAP ANIMAÇÕES
+// ======================================================
+
+if (typeof gsap !== "undefined") {
+
+  gsap.fromTo(
+    ".hero-content h1",
+    {
+      opacity: 0,
+      y: 60
+    },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 1,
+      ease: "power3.out"
+    }
+  );
+
+  gsap.fromTo(
+    ".hero-content p",
+    {
+      opacity: 0,
+      y: 30
+    },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 1,
+      delay: 0.2,
+      ease: "power3.out"
+    }
+  );
+
+  gsap.fromTo(
+    ".hero-buttons .btn",
+    {
+      opacity: 0,
+      y: 20
+    },
+    {
+      opacity: 1,
+      y: 0,
+      stagger: 0.15,
+      delay: 0.4,
+      duration: 0.8,
+      ease: "power3.out"
+    }
+  );
+
+  gsap.fromTo(
+    ".card-pro",
+    {
+      opacity: 0,
+      y: 40
+    },
+    {
+      opacity: 1,
+      y: 0,
+      stagger: 0.15,
+      duration: 0.8,
+      ease: "power3.out"
+    }
+  );
+
+}
+
+
+// ======================================================
+// SCROLL HEADER
+// ======================================================
+
+const header = document.querySelector(".header");
+
+window.addEventListener("scroll", () => {
+
+  if (window.scrollY > 40) {
+    header.classList.add("scrolled");
+  } else {
+    header.classList.remove("scrolled");
+  }
+
 });
 
-// ================= GSAP =================
-if (typeof gsap !== "undefined") {
-  gsap.from(".hero h1", { opacity: 0, y: 50, duration: 1 });
-  gsap.from(".card-pro", { opacity: 0, y: 50, stagger: 0.2 });
-}
 
 
-// ================= CARROSSEL LINHAS =================
-const track = document.getElementById("track");
+// ======================================================
+// ABOUT - LER MAIS
+// ======================================================
 
-if (track) {
-  let isDown = false;
-  let startX;
-  let scrollLeft;
+// ======================================================
+// ABOUT - LER MAIS
+// ======================================================
 
-  track.addEventListener("mousedown", (e) => {
-    isDown = true;
-    track.classList.add("dragging");
-    startX = e.pageX;
-    scrollLeft = track.scrollLeft;
+document.querySelectorAll(".ler-mais").forEach(button => {
+
+  button.addEventListener("click", () => {
+
+    const aboutText = button.closest(".about-text");
+
+    if (!aboutText) return;
+
+    const fullText =
+      aboutText.querySelector(".full-text");
+
+    if (!fullText) return;
+
+    fullText.classList.toggle("show");
+
+    button.innerText =
+      fullText.classList.contains("show")
+        ? "Ler menos"
+        : "Descubra mais";
+
   });
 
-  track.addEventListener("mouseleave", () => isDown = false);
-  track.addEventListener("mouseup", () => isDown = false);
+});
 
-  track.addEventListener("mousemove", (e) => {
-    if (!isDown) return;
-    e.preventDefault();
-    const walk = (e.pageX - startX) * 1.5;
-    track.scrollLeft = scrollLeft - walk;
-  });
+// ======================================================
+// CARDS LINHAS - ACTIVE CENTER
+// ======================================================
 
-  // TOUCH
-  track.addEventListener("touchstart", (e) => {
-    startX = e.touches[0].pageX;
-    scrollLeft = track.scrollLeft;
-  });
+const cards = document.querySelectorAll(".card-pro");
 
-  track.addEventListener("touchmove", (e) => {
-    const walk = (e.touches[0].pageX - startX) * 1.5;
-    track.scrollLeft = scrollLeft - walk;
-  });
+function updateCardCenter() {
 
-  // AUTO SCROLL
-  function autoScroll() {
-    track.scrollLeft += 0.5;
+  const center = window.innerWidth / 2;
 
-    if (track.scrollLeft >= track.scrollWidth / 2) {
-      track.scrollLeft = 0;
+  cards.forEach(card => {
+
+    const rect = card.getBoundingClientRect();
+    const cardCenter = rect.left + rect.width / 2;
+
+    if (Math.abs(center - cardCenter) < 180) {
+      card.classList.add("active");
+    } else {
+      card.classList.remove("active");
     }
 
-    requestAnimationFrame(autoScroll);
-  }
-
-  autoScroll();
-
-  // CARD ATIVO NO CENTRO
-  function updateActiveCard() {
-    const cards = document.querySelectorAll(".card-pro");
-    const center = window.innerWidth / 2;
-
-    cards.forEach(card => {
-      const rect = card.getBoundingClientRect();
-      const cardCenter = rect.left + rect.width / 2;
-
-      if (Math.abs(center - cardCenter) < 150) {
-        card.classList.add("active");
-      } else {
-        card.classList.remove("active");
-      }
-    });
-
-    requestAnimationFrame(updateActiveCard);
-  }
-
-  updateActiveCard();
-}
-
-
-// ================= BUSCA DISTRIBUIDORES =================
-const input = document.getElementById("searchInput");
-const cardsDist = document.querySelectorAll(".card-dist");
-
-if (input) {
-  input.addEventListener("keyup", () => {
-    const value = input.value.toLowerCase();
-
-    cardsDist.forEach(card => {
-      const local = card.dataset.local;
-      card.style.display = local.includes(value) ? "block" : "none";
-    });
   });
+
+  requestAnimationFrame(updateCardCenter);
+
+}
+
+if (cards.length) {
+  updateCardCenter();
 }
 
 
-// ================= DISTRIBUIDORES (VER MAIS PRO) =================
+// ======================================================
+// DISTRIBUIDORES
+// ======================================================
+
 const searchInput = document.getElementById("searchInput");
 const filterState = document.getElementById("filterState");
 const btnVerMais = document.getElementById("btnVerMais");
 
-let visible = 2;
-let mostrandoTodos = false;
+let visibleCards = 3;
 
-function getCards() {
+/* PEGA TODOS OS CARDS */
+function getDistributorCards() {
   return document.querySelectorAll(".card-dist");
 }
 
-/* ================= FILTRO ================= */
+/* FILTRO */
 function filterDistributors() {
-  const search = searchInput.value.toLowerCase();
-  const state = filterState.value;
 
-  let count = 0;
+  const search =
+    searchInput
+      ? searchInput.value.toLowerCase().trim()
+      : "";
 
-  getCards().forEach(card => {
-    const city = card.dataset.city;
-    const cardState = card.dataset.state;
+  const state =
+    filterState
+      ? filterState.value.toLowerCase()
+      : "";
 
-    const matchCity = city.includes(search);
-    const matchState = !state || cardState === state;
+  let visibleCount = 0;
+  let totalMatches = 0;
 
-    if (matchCity && matchState) {
-      if (!mostrandoTodos && count >= visible) {
-        card.style.display = "none";
-      } else {
+  getDistributorCards().forEach(card => {
+
+    const city =
+      (card.dataset.city || "").toLowerCase();
+
+    const cardState =
+      (card.dataset.state || "").toLowerCase();
+
+    const title =
+      card.querySelector("h3")
+        ?.innerText.toLowerCase() || "";
+
+    const matchSearch =
+      city.includes(search) ||
+      title.includes(search);
+
+    const matchState =
+      !state || cardState === state;
+
+    const shouldShow =
+      matchSearch && matchState;
+
+    if (shouldShow) {
+
+      totalMatches++;
+
+      if (visibleCount < visibleCards) {
+
         card.style.display = "block";
+        visibleCount++;
+
+      } else {
+
+        card.style.display = "none";
+
       }
-      count++;
+
     } else {
+
       card.style.display = "none";
+
     }
-  });
-}
 
-/* ================= BOTÃO ================= */
-btnVerMais.addEventListener("click", () => {
-  mostrandoTodos = !mostrandoTodos;
-
-  btnVerMais.innerText = mostrandoTodos ? "Ver menos" : "Ver mais";
-
-  filterDistributors();
-});
-
-/* ================= EVENTOS ================= */
-searchInput.addEventListener("input", () => {
-  mostrandoTodos = false;
-  btnVerMais.innerText = "Ver mais";
-  filterDistributors();
-});
-
-filterState.addEventListener("change", () => {
-  mostrandoTodos = false;
-  btnVerMais.innerText = "Ver mais";
-  filterDistributors();
-});
-
-/* ================= INIT ================= */
-window.addEventListener("load", filterDistributors);
-
-// ================= BACK TO TOP =================
-const btnTop = document.getElementById("backToTop");
-
-if (btnTop) {
-  window.addEventListener("scroll", () => {
-    btnTop.style.display =
-      document.documentElement.scrollTop > 300 ? "block" : "none";
   });
 
-  btnTop.onclick = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-}
+  /* BOTÃO */
 
+  if (btnVerMais) {
 
-// ================= LER MAIS =================
-document.querySelectorAll(".ler-mais").forEach(button => {
-  button.addEventListener("click", () => {
-    const parent = button.parentElement;
-    const fullText = parent.querySelector(".full-text");
+    if (visibleCards >= totalMatches) {
 
-    if (fullText.style.display === "block") {
-      fullText.style.display = "none";
-      button.innerText = "Ler mais";
+      btnVerMais.style.display = "none";
+
     } else {
-      fullText.style.display = "block";
-      button.innerText = "Ler menos";
+
+      btnVerMais.style.display = "inline-flex";
+
     }
+
+  }
+
+}
+
+/* VER MAIS */
+
+/* VER MAIS / MENOS */
+
+/* VER MAIS / MENOS */
+
+if (btnVerMais) {
+
+  btnVerMais.addEventListener("click", () => {
+
+    const totalCards =
+      [...getDistributorCards()]
+        .filter(card => card.style.display !== "none")
+        .length;
+
+    if (btnVerMais.innerText === "Ver mais") {
+
+      visibleCards += 3;
+
+    } else {
+
+      visibleCards = 3;
+
+      window.scrollTo({
+        top:
+          document.getElementById("distribuidores")
+            .offsetTop - 100,
+        behavior: "smooth"
+      });
+
+    }
+
+    filterDistributors();
+
   });
+
+}
+
+/* FILTROS */
+
+if (searchInput) {
+
+  searchInput.addEventListener("input", () => {
+
+    visibleCards = 3;
+
+    filterDistributors();
+
+  });
+
+}
+
+if (filterState) {
+
+  filterState.addEventListener("change", () => {
+
+    visibleCards = 3;
+
+    filterDistributors();
+
+  });
+
+}
+
+/* INIT */
+
+window.addEventListener("load", () => {
+
+  filterDistributors();
+
 });
 
+// ======================================================
+// TESTIMONIAL CAROUSEL PRO
+// ======================================================
 
-// ================= CARROSSEL TESTIMONIAL =================
 const tTrack = document.getElementById("testimonialTrack");
 
 if (tTrack) {
@@ -214,140 +362,293 @@ if (tTrack) {
   let isDown = false;
   let startX;
   let scrollLeft;
-  let isPaused = false;
-  let autoScrollSpeed = 0.3;
-  let snapTimeout;
+  let pause = false;
 
-  const cards = () => document.querySelectorAll(".testimonial-card");
+  const testimonialCards = () =>
+    document.querySelectorAll(".testimonial-card");
 
-  /* ================= DRAG ================= */
+  /* DRAG */
+
   tTrack.addEventListener("mousedown", (e) => {
+
     isDown = true;
-    isPaused = true;
+    pause = true;
+
     startX = e.pageX;
     scrollLeft = tTrack.scrollLeft;
+
   });
 
   tTrack.addEventListener("mouseup", () => {
+
     isDown = false;
-    isPaused = false;
-    snapToClosest();
+
+    setTimeout(() => {
+      pause = false;
+    }, 1500);
+
   });
 
   tTrack.addEventListener("mouseleave", () => {
     isDown = false;
-    isPaused = false;
-    snapToClosest();
   });
 
   tTrack.addEventListener("mousemove", (e) => {
+
     if (!isDown) return;
+
     e.preventDefault();
+
     const walk = (e.pageX - startX) * 1.5;
+
     tTrack.scrollLeft = scrollLeft - walk;
+
   });
 
-  /* ================= TOUCH ================= */
+  /* TOUCH */
+
   tTrack.addEventListener("touchstart", (e) => {
-    isPaused = true;
+
+    pause = true;
+
     startX = e.touches[0].pageX;
     scrollLeft = tTrack.scrollLeft;
-  });
 
-  tTrack.addEventListener("touchend", () => {
-    isPaused = false;
-    snapToClosest();
   });
 
   tTrack.addEventListener("touchmove", (e) => {
-    const walk = (e.touches[0].pageX - startX) * 1.5;
+
+    const walk = (e.touches[0].pageX - startX) * 1.2;
+
     tTrack.scrollLeft = scrollLeft - walk;
+
   });
 
-  /* ================= AUTOPLAY ================= */
-  function autoScroll() {
+  tTrack.addEventListener("touchend", () => {
 
-    if (!isPaused && !isDown) {
-      tTrack.scrollLeft += autoScrollSpeed;
+    setTimeout(() => {
+      pause = false;
+    }, 1500);
+
+  });
+
+  /* AUTOPLAY */
+
+  function autoPlay() {
+
+    if (!pause) {
+      tTrack.scrollLeft += 0.4;
     }
 
-    requestAnimationFrame(autoScroll);
+    requestAnimationFrame(autoPlay);
+
   }
 
-  autoScroll();
+  autoPlay();
 
-  /* ================= SNAP CENTRAL PERFEITO ================= */
-  function snapToClosest() {
-    clearTimeout(snapTimeout);
+  /* ACTIVE CARD */
 
-    snapTimeout = setTimeout(() => {
-      const trackRect = tTrack.getBoundingClientRect();
-      const center = trackRect.left + trackRect.width / 2;
+  function updateTestimonialActive() {
 
-      let closest = null;
-      let closestDistance = Infinity;
+    const center =
+      tTrack.getBoundingClientRect().left +
+      tTrack.offsetWidth / 2;
 
-      cards().forEach(card => {
-        const rect = card.getBoundingClientRect();
-        const cardCenter = rect.left + rect.width / 2;
+    testimonialCards().forEach(card => {
 
-        const distance = Math.abs(center - cardCenter);
-
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closest = card;
-        }
-      });
-
-      if (closest) {
-        const offset =
-          closest.offsetLeft -
-          tTrack.offsetWidth / 2 +
-          closest.offsetWidth / 2;
-
-        tTrack.scrollTo({
-          left: offset,
-          behavior: "smooth"
-        });
-      }
-
-    }, 120); // delay evita conflito com drag
-  }
-
-  /* ================= CARD ATIVO ================= */
-  function updateActive() {
-    const trackRect = tTrack.getBoundingClientRect();
-    const center = trackRect.left + trackRect.width / 2;
-
-    cards().forEach(card => {
       const rect = card.getBoundingClientRect();
-      const cardCenter = rect.left + rect.width / 2;
 
-      if (Math.abs(center - cardCenter) < 120) {
+      const cardCenter =
+        rect.left + rect.width / 2;
+
+      if (Math.abs(center - cardCenter) < 140) {
         card.classList.add("active");
       } else {
         card.classList.remove("active");
       }
+
     });
 
-    requestAnimationFrame(updateActive);
+    requestAnimationFrame(updateTestimonialActive);
+
   }
 
-  updateActive();
+  updateTestimonialActive();
+
 }
 
- /* ================= AUTO BUSCA ================= */
 
- const params = new URLSearchParams(window.location.search);
+// ======================================================
+// BACK TO TOP
+// ======================================================
+
+const btnTop = document.getElementById("backToTop");
+
+if (btnTop) {
+
+  window.addEventListener("scroll", () => {
+
+    if (window.scrollY > 400) {
+      btnTop.classList.add("show");
+    } else {
+      btnTop.classList.remove("show");
+    }
+
+  });
+
+  btnTop.addEventListener("click", () => {
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+
+  });
+
+}
+
+
+// ======================================================
+// AUTO BUSCA PRODUTO
+// ======================================================
+
+const params = new URLSearchParams(window.location.search);
 const produto = params.get("produto");
 
-if (produto) {
-  const input = document.getElementById("searchInput");
+if (produto && searchInput) {
 
-  if (input) {
-    input.value = produto.toLowerCase();
+  searchInput.value = produto.toLowerCase();
 
-    // dispara o filtro automaticamente
-    input.dispatchEvent(new Event("input"));
-  }
+  searchInput.dispatchEvent(
+    new Event("input")
+  );
+
 }
+
+// ======================================================
+// WHY CAROUSEL PRO
+// ======================================================
+
+const whyTrack = document.querySelector(".track-why");
+
+if (whyTrack) {
+
+  let isDown = false;
+  let startX;
+  let scrollLeft;
+  let pause = false;
+
+  const cards = () =>
+    document.querySelectorAll(".card-why");
+
+  /* DRAG */
+
+  whyTrack.addEventListener("mousedown", (e) => {
+
+    isDown = true;
+    pause = true;
+
+    startX = e.pageX;
+    scrollLeft = whyTrack.scrollLeft;
+
+  });
+
+  whyTrack.addEventListener("mouseup", () => {
+
+    isDown = false;
+
+    setTimeout(() => {
+      pause = false;
+    }, 1200);
+
+  });
+
+  whyTrack.addEventListener("mouseleave", () => {
+    isDown = false;
+  });
+
+  whyTrack.addEventListener("mousemove", (e) => {
+
+    if (!isDown) return;
+
+    e.preventDefault();
+
+    const walk = (e.pageX - startX) * 1.5;
+
+    whyTrack.scrollLeft = scrollLeft - walk;
+
+  });
+
+  /* TOUCH */
+
+  whyTrack.addEventListener("touchstart", (e) => {
+
+    pause = true;
+
+    startX = e.touches[0].pageX;
+    scrollLeft = whyTrack.scrollLeft;
+
+  });
+
+  whyTrack.addEventListener("touchmove", (e) => {
+
+    const walk = (e.touches[0].pageX - startX) * 1.3;
+
+    whyTrack.scrollLeft = scrollLeft - walk;
+
+  });
+
+  whyTrack.addEventListener("touchend", () => {
+
+    setTimeout(() => {
+      pause = false;
+    }, 1200);
+
+  });
+
+  /* AUTOPLAY */
+
+  function autoPlay() {
+
+    if (!pause) {
+      whyTrack.scrollLeft += 0.4;
+    }
+
+    requestAnimationFrame(autoPlay);
+
+  }
+
+  autoPlay();
+
+  /* ACTIVE CARD */
+
+  function updateWhyActive() {
+
+    const center =
+      whyTrack.getBoundingClientRect().left +
+      whyTrack.offsetWidth / 2;
+
+    cards().forEach(card => {
+
+      const rect = card.getBoundingClientRect();
+
+      const cardCenter =
+        rect.left + rect.width / 2;
+
+      if (Math.abs(center - cardCenter) < 140) {
+        card.classList.add("active");
+      } else {
+        card.classList.remove("active");
+      }
+
+    });
+
+    requestAnimationFrame(updateWhyActive);
+
+  }
+
+  updateWhyActive();
+
+}
+
+
